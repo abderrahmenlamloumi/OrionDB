@@ -228,8 +228,6 @@ I am building OrionDB as an educational systems engineering project focused on u
 ## Observability
 
 - [ ] `pprof` profiling endpoints mounted
-- [ ] Prometheus self-metrics exposed
-- [ ] Grafana dashboards
 
 ## Deployment
 
