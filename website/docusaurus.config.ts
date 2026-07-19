@@ -18,13 +18,13 @@ const config: Config = {
   url: "https://abderrahmenlamloumi.github.io",
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: "/Orion-Collector/",
+  baseUrl: "/OrionDB/",
   trailingSlash: false,
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: "abderrahmenlamloumi",
-  projectName: "Orion-Collector",
+  projectName: "OrionDB",
 
   onBrokenLinks: "throw",
 
@@ -43,7 +43,7 @@ const config: Config = {
         docs: {
           sidebarPath: "./sidebars.ts",
           editUrl:
-            "https://github.com/abderrahmenlamloumi/Orion-Collector/tree/main/website/",
+            "https://github.com/abderrahmenlamloumi/OrionDB/tree/main/website/",
         },
         blog: false,
         theme: {
@@ -80,7 +80,7 @@ const config: Config = {
           position: "left",
         },
         {
-          href: "https://github.com/abderrahmenlamloumi/Orion-Collector",
+          href: "https://github.com/abderrahmenlamloumi/OrionDB",
           label: "GitHub",
           position: "right",
         },
@@ -107,15 +107,15 @@ const config: Config = {
           items: [
             {
               label: "Repository",
-              href: "https://github.com/abderrahmenlamloumi/Orion-Collector",
+              href: "https://github.com/abderrahmenlamloumi/OrionDB",
             },
             {
               label: "Main README",
-              href: "https://github.com/abderrahmenlamloumi/Orion-Collector#readme",
+              href: "https://github.com/abderrahmenlamloumi/OrionDB#readme",
             },
             {
               label: "orion-db module",
-              href: "https://github.com/abderrahmenlamloumi/Orion-Collector/tree/main/orion-db",
+              href: "https://github.com/abderrahmenlamloumi/OrionDB/tree/main/orion-db",
             },
           ],
         },
