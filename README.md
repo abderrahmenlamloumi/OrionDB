@@ -88,48 +88,7 @@ Instead of relying on generic storage libraries, OrionDB implements:
 
 # Deployment & Operations Guide
 
-## Prerequisites
-
-Before getting started, install:
-
-- Go **1.21+**
-- Docker & Docker Compose
-- GNU Make
-
----
-
-## 1. Build the Project
-
-TODO
-
----
-
-## 2. Running OrionDB
-
-
-### Ingester
-
-TODO
-
-### Consumer
-
-TODO
-
----
-
-## 3. Running the Test Suite
-TODO
-
----
-
-## 4. Benchmarking
-TODO
-
----
-
-## 5. Profiling
-
-OrionDB will exposes standard Go `pprof` endpoints for runtime analysis.
+For user and deployment documentation, see [docs](https://abderrahmenlamloumi.github.io/OrionDB/docs/getting-started).
 
 ---
 
@@ -190,7 +149,7 @@ Building OrionDB explores:
 
 # Status
 
-I am building OrionDB as an educational systems engineering project focused on understanding the architectural trade-offs behind modern observability platforms. Rather than competing with mature telemetry databases, its goal is to build, measure, profile, and continuously improve a complete telemetry ingestion and storage engine from first principles without using and gluing established tools.
+I am building OrionDB as a systems engineering project to focused on understanding the architectural from first principle and trade-offs behind modern observability platforms rather than using and gluing established tools.
 
 # Roadmap
 ## Ingestion
