@@ -149,7 +149,8 @@ Building OrionDB explores:
 
 # Status
 
-I am building OrionDB as a systems engineering project to focused on understanding the architectural from first principle and trade-offs behind modern observability platforms rather than using and gluing established tools.
+I am building OrionDB as a systems engineering project. My focus is on understanding the architectural trade-offs behind modern observability 
+platforms from first principles, rather than simply gluing together established tools.
 
 # Roadmap
 ## Ingestion
