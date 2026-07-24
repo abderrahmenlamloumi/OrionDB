@@ -12,7 +12,7 @@ The project explores the engineering challenges behind large-scale observability
 - building storage engines optimized for sequential writes
 - designing low-latency indexing structures
 
-Rather than recreating an existing observability platform, OrionDB is designed as a systems engineering project to understand and implement the architectural principles behind modern telemetry infrastructure.
+**Rather than recreating an existing observability platform, OrionDB is designed as a systems engineering project to understand and implement the architectural principles behind modern telemetry infrastructure.**
 
 ---
 
@@ -55,7 +55,7 @@ OrionDB minimizes allocations on the network hot path through:
 - lock-free MPMC ring buffers
 - controlled object ownership
 
-The objective is predictable latency while approaching **0 B/op** during ingestion.
+The objective is predictable latency while minimizing heap allocation pressure on the ingestion hot path via sync.Pool
 
 ### Roaring Bitmap Inverted Index
 
@@ -155,10 +155,11 @@ platforms from first principles, rather than simply gluing together established 
 # Roadmap
 ## Ingestion
 
-- [ ] OTLP/gRPC gateway: receives, validates, writes to WAL
+- [ ] Custom OTLP/gRPC gateway: receives, validates, writes to WAL
 - [ ] `sync.Pool` object reuse
 - [ ] OpenTelemetry Collector integration
 - [ ] Prometheus remote-write compatibility
+- [ ] Native OTLP Support: Upgrade the ingestion endpoint to natively accept OpenTelemetry metric payloads
 
 ## Pipeline
 
@@ -194,10 +195,10 @@ platforms from first principles, rather than simply gluing together established 
 - [ ] Docker Compose: present, boots individual services
 - [ ] Terraform / Helm: stubs only
 
-## Validation
-
-- [ ] Benchmarks proving the target numbers: load generator + committed results pending
-
+## Validation & Benchmarks
+- [ ] Load Testing Engine: to Built and validate under aggressive multi-worker chaos loads.
+- [ ] Empirical Throughput: Proven to sustain **~38,000 to 40,000 req/sec** on a single node.
+- [ ] Resilience & Backpressure: to validate active load-shedding (`ResourceExhausted`) ensuring zero OOM crashes under extreme concurrency spikes (e.g., 200+ workers).
 ---
 
 ## License
