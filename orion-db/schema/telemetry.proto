@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package orion.db;
+
+option go_package = "orion-db/schema";
+
+message TelemetryPoint {
+  string metric = 1;
+  double value = 2;
+  int64 timestamp = 3;
+  map<string, string> labels = 4;
+}
+
+service Collector {
+  rpc SubmitTelemetry(TelemetryPoint) returns (TelemetryPoint);
+}
