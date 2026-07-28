@@ -24,7 +24,7 @@ var stats struct {
 
 func main() {
 	addr := flag.String("addr", "127.0.0.1:9090", "OrionDB address")
-	workers := flag.Int("workers", 50, "Concurrent workers")
+	workers := flag.Int("workers", 100, "Concurrent workers")
 	duration := flag.Duration("duration", 20*time.Second, "Benchmark duration")
 	flag.Parse()
 
@@ -39,7 +39,7 @@ func main() {
 	defer cancel()
 
 	start := time.Now()
-	log.Printf("[CHAOS MODE] Starting aggressive load simulation (%d workers, %v)...", *workers, *duration)
+	log.Printf("Starting load simulation (%d workers, %v)...", *workers, *duration)
 
 	// Live statistics
 	go func() {
@@ -71,7 +71,7 @@ func main() {
 						"service": []string{"checkout-api", "auth-service", "payment-processor", "user-gateway"}[rng.Intn(4)],
 						"region":  []string{"eu-west-3", "us-east-1", "ap-southeast-1"}[rng.Intn(3)],
 						"env":     []string{"production", "staging", "development"}[rng.Intn(3)],
-						"pod":     fmt.Sprintf("pod-%d-%x", rng.Intn(50000), rng.Int31()), // Replaced randString with %x
+						"pod":     fmt.Sprintf("pod-%d-%x", rng.Intn(50000), rng.Int31()),
 					},
 				})
 				reqCancel()
