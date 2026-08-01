@@ -2,7 +2,7 @@
 
 # Overview
 
-**OrionDB** is an experimental Go-based telemetry database for exploring the storage architectures that power modern observability platforms.
+**OrionDB** is a high-performance, experimental Go-based telemetry database capable of sustaining ten of thousands of requests per second while exploring the storage architectures that power modern observability platforms.
 
 The project explores the engineering challenges behind large-scale observability systems, including:
 
@@ -164,6 +164,7 @@ platforms from first principles, rather than simply gluing together established 
 ## Pipeline
 
 - [ ] Lock-free MPMC ring buffer
+  - Reference I used to learn the basics: [A simple lock-free ring buffer](https://kmdreko.github.io/posts/20191003/a-simple-lock-free-ring-buffer/)
 - [ ] Ingester → ring buffer → storage hot path fully connected
 
 ## Index
