@@ -1,0 +1,42 @@
+# OS and editor files
+.DS_Store
+.vscode/
+.idea/
+
+# Environment files and local virtual environments
+.env
+.env.*
+!.env.example
+.venv/
+venv/
+env/
+
+# Go
+/bin/
+*.exe
+*.test
+*.out
+coverage.out
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+
+# Node.js and Docusaurus
+node_modules/
+website/build/
+website/.docusaurus/
+website/.cache-loader/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Terraform
+**/.terraform/
+*.tfstate
+*.tfstate.*
+
+# Local runtime data
+*.log
