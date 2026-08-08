@@ -11,7 +11,7 @@ description: Component layout and core data path concepts.
 Current architecture documents and code describe a four-stage flow:
 
 ```text
-Agent -> Ingester -> Consumer -> MLOps (WIP)
+Agent -> Ingester -> Consumer -> MLOps
 ```
 
 The schema contract (`schema/telemetry.proto`) defines shared telemetry message types.
@@ -26,7 +26,13 @@ The schema contract (`schema/telemetry.proto`) defines shared telemetry message 
 
 ## Series identity
 
+The index package in `orion-db/internal/index` assigns stable numeric IDs to metric series. A series key combines the metric name with its labels in sorted key order, so the same metric and labels produce the same ID regardless of map iteration order. IDs are created lazily and protected by a read/write mutex.
+
 ## Bitmap tag indexing
+
+`TagIndex` stores each `key=value` tag as a Roaring Bitmap of matching series IDs. The index uses 16 FNV-hash shards, each with its own lock, so independent tag updates can proceed concurrently. Queries clone the relevant bitmaps under read locks and intersect them to return series matching all requested tags. A missing tag or an empty query returns an empty bitmap.
+
+The ingester creates the series ID first, adds every metric tag to the bitmap index, and then appends the value to the WAL. This keeps label filtering separate from the series registry and avoids scanning every series during a tag query.
 
 ## WAL framing and recovery
 

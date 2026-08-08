@@ -160,7 +160,7 @@ platforms from first principles, rather than simply gluing together established 
 ## Ingestion
 
 - [ ] Custom OTLP/gRPC gateway: receives, validates, writes to WAL
-- [ ] `sync.Pool` object reuse
+- [x] `sync.Pool` object reuse
 - [ ] OpenTelemetry Collector integration
 - [ ] Prometheus remote-write compatibility
 - [ ] Native OTLP Support: Upgrade the ingestion endpoint to natively accept OpenTelemetry metric payloads
@@ -173,9 +173,9 @@ platforms from first principles, rather than simply gluing together established 
 
 ## Index
 
-- [ ] Series registry, canonical keys, stable IDs
-- [ ] Roaring bitmap inverted index
-- [ ] Bitmap query optimizer
+- [x] Series registry, canonical keys, stable IDs
+- [x] Roaring bitmap inverted index
+- [x] Bitmap query optimizer
 
 ## Storage
 
