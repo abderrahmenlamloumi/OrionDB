@@ -57,6 +57,10 @@ OrionDB minimizes allocations on the network hot path through:
 
 The objective is predictable latency while minimizing heap allocation pressure on the ingestion hot path via sync.Pool
 
+### Lock-Free MPMC Ring Buffer
+
+Metrics move from gRPC handlers to consumers through the bounded, lock-free MPMC queue. Each slot has a metric pointer and sequence number; producers and consumers claim slots with atomic compare-and-swap operations, then publish or release slots by updating the sequence.
+
 ### Roaring Bitmap Inverted Index
 
 Rather than storing millions of tag strings directly, OrionDB converts labels into compressed bitmap indexes.
@@ -163,7 +167,7 @@ platforms from first principles, rather than simply gluing together established 
 
 ## Pipeline
 
-- [ ] Lock-free MPMC ring buffer
+- [x] Lock-free MPMC ring buffer
   - Reference I used to learn the basics: [A simple lock-free ring buffer](https://kmdreko.github.io/posts/20191003/a-simple-lock-free-ring-buffer/)
 - [ ] Ingester → ring buffer → storage hot path fully connected
 
