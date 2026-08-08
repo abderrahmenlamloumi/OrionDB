@@ -41,12 +41,12 @@ Telemetry request
 	  |
 	  v
   Enqueue  --->  bounded ring buffer  --->  Dequeue
-											 |
-											 v
-								  series index + tag index
-											 |
-											 v
-											 WAL
+                                    |
+                                    v
+                        series index + tag index
+                                    |
+                                    v
+                                    WAL
 ```
 
 Each slot stores a metric pointer and sequence number. Producers and consumers claim slots with atomic compare-and-swap operations, then publish or release them by updating the sequence number. This keeps the queue bounded and avoids mutex contention.
