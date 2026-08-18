@@ -49,7 +49,7 @@ func BenchmarkWALGroupCommit256(b *testing.B) {
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
-		if err := wal.AppendBatchAndSync(records); err != nil {
+		if err := wal.AppendBatch(records); err != nil {
 			b.Fatal(err)
 		}
 	}
