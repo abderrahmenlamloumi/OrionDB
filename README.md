@@ -96,48 +96,7 @@ For user and deployment documentation, see [docs](https://abderrahmenlamloumi.gi
 
 ---
 
-# Storage Engine
-
-The storage layer follows Log-Structured Merge Tree (LSM) principles.
-
-```text
-              Write Request
-                    │
-                    ▼
-             Write-Ahead Log
-                    │
-                    ▼
-                MemTable
-                    │
-             Flush Threshold
-                    │
-                    ▼
-                 SSTables
-                    │
-                    ▼
-               Compaction
-```
----
-
-# Storage Guarantees
-
-OrionDB focuses on predictable write performance while maintaining durability.
-
-## Crash Recovery
-
-Incomplete WAL records are detected and safely truncated during startup.
-
-## Sequential Writes
-
-All writes are optimized around append-only disk access to minimize random I/O.
-
-## Immutable SSTables
-
-Immutable data files simplify compaction while reducing write amplification.
-
----
-
-# Engineering Topics To Be Explored
+# Engineering Topics Explored
 
 Building OrionDB explores:
 
@@ -156,54 +115,70 @@ Building OrionDB explores:
 I am building OrionDB as a systems engineering project. My focus is on understanding the architectural trade-offs behind modern observability 
 platforms from first principles, rather than simply gluing together established tools.
 
-# Roadmap
+# Current implementation status
+
 ## Ingestion
 
-- [ ] Custom OTLP/gRPC gateway: receives, validates, writes to WAL
-- [x] `sync.Pool` object reuse
+- [x] gRPC telemetry ingestion endpoint
+- [x] metric validation and conversion into internal structs
+- [x] buffered ingestion path with queue-based backpressure
 - [ ] OpenTelemetry Collector integration
 - [ ] Prometheus remote-write compatibility
-- [ ] Native OTLP Support: Upgrade the ingestion endpoint to natively accept OpenTelemetry metric payloads
+- [ ] native OTLP payload support beyond the custom gRPC contract
 
 ## Pipeline
 
 - [x] Lock-free MPMC ring buffer
-  - Reference I used to learn the basics: [A simple lock-free ring buffer](https://kmdreko.github.io/posts/20191003/a-simple-lock-free-ring-buffer/)
-- [ ] Ingester → ring buffer → storage hot path fully connected
+  - Reference used for the design: [A simple lock-free ring buffer](https://kmdreko.github.io/posts/20191003/a-simple-lock-free-ring-buffer/)
+- [x] ingester → ring buffer → consumer → storage hot path
+- [x] consumer workers processing telemetry concurrently
 
 ## Index
 
-- [x] Series registry, canonical keys, stable IDs
-- [x] Roaring bitmap inverted index
-- [x] Bitmap query optimizer
+- [x] Series registry with stable numeric IDs
+- [x] tag bitmap index for label-based filtering
+- [x] deterministic series identity from metric name + labels
 
 ## Storage
 
-- [ ] Append-only Write-Ahead Log with framed, CRC32-checked records
-- [ ] WAL crash recovery
-- [ ] MemTable (SkipList)
-- [ ] SSTable format
+Reference used for the design: [How to Build an LSM Tree Storage Engine from Scratch Full Handbook
+](https://www.freecodecamp.org/news/build-an-lsm-tree-storage-engine-from-scratch-handbook/)
+
+- [x] append-only WAL with framed records
+- [x] CRC32-checked record validation
+- [x] WAL crash recovery and truncated-tail recovery
+- [x] LSM-style memtable tracking
+- [x] SSTable flush path
+- [x] async WAL sync loop to avoid fsync on the hot path
+- [x] background compaction trigger outside the write critical path
 - [ ] Bloom filters
-- [ ] Compaction engine
+- [ ] advanced multi-level compaction strategy
+
 
 ## Processing & MLOps
 
-- [ ] Consumer / stream processing 
-- [ ] Anomaly detection
+- [x] consumer pipeline for ingest processing
+- [ ] anomaly detection
+- [ ] downstream analytics workflows
 
 ## Observability
 
-- [ ] `pprof` profiling endpoints mounted
+- [x] `pprof` profiling endpoints mounted
+- [x] live load stats in the benchmarking agent
 
 ## Deployment
 
-- [ ] Docker Compose: present, boots individual services
-- [ ] Terraform / Helm: stubs only
+- [x] Docker Compose configuration present
+- [ ] Terraform / Helm manifests
 
 ## Validation & Benchmarks
-- [ ] Load Testing Engine: to Built and validate under aggressive multi-worker chaos loads.
-- [ ] Empirical Throughput: Proven to sustain **~38,000 to 40,000 req/sec** on a single node.
-- [ ] Resilience & Backpressure: to validate active load-shedding (`ResourceExhausted`) ensuring zero OOM crashes under extreme concurrency spikes (e.g., 200+ workers).
+
+- [x] load-testing agent for multi-worker traffic generation
+- [x] throughput benchmarking under concurrent load
+- [x] backpressure behavior via `ResourceExhausted` when the queue fills
+- [ ] sustained production-like benchmarking on larger hardware
+- [ ] formal resilience validation under long-running stress
+
 ---
 
 ## License
