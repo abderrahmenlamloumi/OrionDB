@@ -6,36 +6,37 @@ description: Purpose, scope, and intended users of OrionDB.
 
 # Project overview
 
-OrionDB is a telemetry ingestion and storage project written primarily in Go. It is designed as a systems engineering project for studying the architecture trade-offs behind modern observability platforms, especially the interaction between high-volume ingestion, indexing, and durable storage.
+OrionDB is a Go-based telemetry ingestion and storage prototype. Its purpose is to explore the trade-offs involved in high-volume writes, high-cardinality labels, bounded queues, and sequential storage. It is useful for local experiments, benchmarks, and systems-engineering study.
 
-The repository is intentionally built around real engineering constraints rather than as a toy demo. The current design emphasizes:
+## What runs today
 
-- bounded ingestion pressure
-- predictable hot-path behavior
-- controlled disk write amplification
-- low-latency label indexing
-- crash-safe WAL recovery
-
-## Target problem
-
-Modern telemetry systems must absorb a large number of high-cardinality events while keeping the write path stable under concurrency. OrionDB exercises the patterns used to solve this problem at a smaller scale: a ring buffer, in-memory series registry, bitmap-based tags, append-only WAL writes, and an LSM-style storage layer.
-
-## Current implementation
-
-The active pipeline is:
+The supported end-to-end path is the `ingester` service plus the synthetic `agent` client:
 
 ```text
-Agent
+agent
   -> gRPC SubmitTelemetry
-  -> Ring Buffer (bounded)
-  -> Consumer worker
-  -> Series registry + tag index
-  -> WAL append
-  -> Memtable
-  -> SSTable flush
-  -> Compaction
+  -> bounded ring buffer
+  -> ingester consumer workers
+  -> series registry and tag bitmap index
+  -> WAL-backed LSM storage
 ```
 
-This is not a purely theoretical project anymore; the repository contains the working pieces for an end-to-end telemetry pipeline and the documentation reflects the implemented architecture.
+The `consumer` binary is a separate in-memory example and is not connected to the ingester. The `mlops` directory contains a standalone Python `IsolationForest` example and is not called by the Go service.
 
-For safe usage, rely on implemented code paths and the current command set in [API and command reference](./api-command-reference.md).
+## Repository components
+
+| Path | Role |
+| --- | --- |
+| `orion-db/ingester` | gRPC server, queue, indexing, and storage write path |
+| `orion-db/agent` | Concurrent synthetic telemetry load generator |
+| `orion-db/consumer` | Standalone bounded in-memory `TSDB` example |
+| `orion-db/internal/buffer` | Bounded lock-free MPMC ring buffer |
+| `orion-db/internal/index` | Series identity and label bitmap indexes |
+| `orion-db/internal/storage` | WAL, memtable, SSTable, and compaction implementation |
+| `orion-db/mlops` | Standalone Python anomaly-detection example |
+| `orion-db/schema` | Protobuf source and generated Go bindings |
+| `orion-db/deploy` | Docker Compose, Helm, and Terraform scaffolding |
+
+## Support boundary
+
+The project does not currently provide authentication, TLS, a query/read API, retention, replication, tenant isolation, schema validation beyond protobuf decoding, or production SLOs. Treat local benchmarks as exploratory measurements rather than capacity guarantees. See [Architecture and concepts](./architecture-concepts.md) and [FAQ](./faq.md).

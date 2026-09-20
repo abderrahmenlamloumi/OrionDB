@@ -5,26 +5,24 @@ description: Start here to understand and run OrionDB.
 slug: /
 ---
 
-# OrionDB Documentation
+# OrionDB documentation
 
-This site documents the OrionDB repository, with a focus on the Go module in `orion-db/`.
+OrionDB is an experimental Go telemetry ingestion and storage engine. The repository contains a working local pipeline for accepting telemetry over gRPC, buffering it, indexing series labels, and writing values through a WAL-backed LSM-style store.
 
-Use these paths:
+## Start here
 
-- New to the project: go to [Getting started](./getting-started.md)
-- Need architecture context: go to [Architecture and concepts](./architecture-concepts.md)
-- Need command/API details: go to [API and command reference](./api-command-reference.md)
+- [Project overview](./project-overview.md): scope, components, and support boundary.
+- [Getting started](./getting-started.md): build, test, and run the local pipeline.
+- [First working example](./first-working-example.md): send telemetry and observe the response.
+- [Configuration](./configuration.md): ports, environment variables, and storage defaults.
+- [API and command reference](./api-command-reference.md): protobuf contract and commands.
 
-## What this documentation covers
+## Before deploying
 
-- Repository purpose and scope
-- Verified prerequisites and installation commands
-- Local workflows for build, test, and service startup
-- Current gRPC contract (`Collector.SubmitTelemetry`)
-- Current architecture and implementation status
+This is a research prototype, not a production-ready telemetry backend. There is no authentication, TLS configuration, query API, retention policy, replication, metrics endpoint, or durability acknowledgment contract. The deployment files are development scaffolding and must be reviewed before use outside a local environment.
 
-## Source of truth
+See [Architecture and concepts](./architecture-concepts.md) for the data path and [Troubleshooting](./troubleshooting.md) for known limitations.
 
-All procedures and references are derived from files in this repository.
+## Documentation source of truth
 
-If you find behavior that differs from this documentation, please open an issue or update docs in a pull request :) . See [Contributing to the documentation](./contributing-docs.md).
+Procedures in this site are derived from the repository, especially `orion-db/Makefile`, `orion-db/schema/telemetry.proto`, and the service entrypoints. Report discrepancies through the workflow in [Contributing to the documentation](./contributing-docs.md).
