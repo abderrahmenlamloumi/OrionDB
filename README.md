@@ -141,8 +141,7 @@ platforms from first principles, rather than simply gluing together established 
 
 ## Storage
 
-Reference used for the design: [How to Build an LSM Tree Storage Engine from Scratch Full Handbook
-](https://www.freecodecamp.org/news/build-an-lsm-tree-storage-engine-from-scratch-handbook/)
+Reference used for the design: [How to Build an LSM Tree Storage Engine from Scratch Full Handbook](https://www.freecodecamp.org/news/build-an-lsm-tree-storage-engine-from-scratch-handbook/)
 
 - [x] append-only WAL with framed records
 - [x] CRC32-checked record validation
