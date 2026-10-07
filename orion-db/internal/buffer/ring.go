@@ -99,3 +99,22 @@ func (rb *RingBuffer) Dequeue() *ingest.Metric {
 		}
 	}
 }
+
+// Depth returns an approximate queue depth for monitoring.
+func (rb *RingBuffer) Depth() uint64 {
+	head := atomic.LoadUint64(&rb.head)
+	tail := atomic.LoadUint64(&rb.tail)
+	if tail > head {
+		return 0
+	}
+	depth := head - tail
+	if depth > rb.capacity {
+		return rb.capacity
+	}
+	return depth
+}
+
+// Capacity returns the fixed number of queue slots.
+func (rb *RingBuffer) Capacity() uint64 {
+	return rb.capacity
+}
