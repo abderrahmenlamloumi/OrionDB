@@ -1,6 +1,7 @@
 package storage
 
 import (
+	"encoding/gob"
 	"os"
 	"path/filepath"
 	"testing"
@@ -27,6 +28,59 @@ func TestLSMPutGet(t *testing.T) {
 	}
 	if entry.Key != 42 || entry.Timestamp != 1000 || entry.Value != 1.5 {
 		t.Fatalf("unexpected entry: %#v", entry)
+	}
+}
+
+func TestLSMMigratesLegacyGobSSTable(t *testing.T) {
+	dir := t.TempDir()
+	legacyPath := filepath.Join(dir, "data-0.sst")
+	legacyFile, err := os.Create(legacyPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := gob.NewEncoder(legacyFile).Encode(Entry{Key: 71, Timestamp: 710, Value: 7.1}); err != nil {
+		t.Fatal(err)
+	}
+	if err := legacyFile.Close(); err != nil {
+		t.Fatal(err)
+	}
+	manifestFile, err := os.Create(filepath.Join(dir, "MANIFEST"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := gob.NewEncoder(manifestFile).Encode(manifest{SSTables: []string{legacyPath}}); err != nil {
+		t.Fatal(err)
+	}
+	if err := manifestFile.Close(); err != nil {
+		t.Fatal(err)
+	}
+
+	db, err := OpenLSM(Config{Dir: dir})
+	if err != nil {
+		t.Fatal(err)
+	}
+	entry, err := db.Get(71)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if entry.Timestamp != 710 || entry.Value != 7.1 {
+		t.Fatalf("legacy value changed during migration: %#v", entry)
+	}
+	if _, err := os.Stat(legacyPath); !os.IsNotExist(err) {
+		t.Fatalf("legacy table should be removed after manifest commit, stat error=%v", err)
+	}
+	if err := db.Close(); err != nil {
+		t.Fatal(err)
+	}
+
+	reopened, err := OpenLSM(Config{Dir: dir})
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer reopened.Close()
+	entry, err = reopened.Get(71)
+	if err != nil || entry.Timestamp != 710 || entry.Value != 7.1 {
+		t.Fatalf("migrated binary table did not survive reopen: entry=%#v err=%v", entry, err)
 	}
 }
 
