@@ -1,38 +1,26 @@
 ---
 id: contributing-docs
-title: Contributing to the Documentation
-description: How to edit, validate, and submit documentation updates.
+title: Contributing to Documentation
+description: How to edit and build the OrionDB docs.
 ---
 
-# Contributing to the documentation
+# Contributing to the Documentation
 
-## Documentation location
+The OrionDB documentation is built using [Docusaurus 3](https://docusaurus.io/), a modern static website generator.
 
-- Docusaurus site: `website/`
-- Markdown docs: `website/docs/`
-- Sidebar config: `website/sidebars.ts`
-- Site config: `website/docusaurus.config.ts`
+## Editing Content
 
-## Local documentation workflow
+All documentation content is written in Markdown (`.md`) and located in the `docs/` folder at the root of the project.
 
-From repository root:
+To make a change:
+1. Edit the relevant `.md` file.
+2. Ensure the frontmatter (`id`, `title`) remains intact at the top of the file.
+
+## Running the Docs Locally
+
+To preview your changes locally before committing:
 
 ```bash
 cd website
-npm install
-npm run build
-```
-
-Optional local preview:
-
-```bash
-npm run start
-```
-
-## Docs deployment model
-
-Documentation deploys with GitHub Actions workflow:
-
-- `.github/workflows/deploy-docs.yml`
-
-GitHub Pages should be configured to publish from GitHub Actions.
+npm ci
+npm start

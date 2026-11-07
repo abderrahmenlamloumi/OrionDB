@@ -1,36 +1,21 @@
 ---
 id: prerequisites
 title: Prerequisites
-description: Tools required to build and run OrionDB from this repository.
+description: System requirements for building and running OrionDB.
 ---
 
 # Prerequisites
 
-The following requirements are for the documented local workflows.
+To build, run, and develop OrionDB, ensure your system has the following tools installed.
 
-## Required tools
+## Core Requirements
 
-- Go 1.24 or newer (required by `orion-db/go.mod`)
-- Docker and Docker Compose v2 (required for the Compose build)
-- GNU Make (used by primary local workflows)
-- Python 3.11 or newer for the local MLOps example
-- Node.js 20 or newer and npm for the documentation site
+- **[Go (1.24+)](https://go.dev/dl/):** OrionDB is written entirely in Go.
+- **Make:** Used for running build scripts (standard on Linux/macOS. For Windows, use WSL or Mingw).
 
-## Optional tools
+## Optional Requirements (For Development)
 
-- `protoc` plus Go protobuf plugins if you plan to regenerate schema code
-- `curl` or `grpcurl` for manual endpoint checks
-
-## Verify installed versions
-
-```bash
-go version
-docker --version
-docker compose version
-make --version
-python --version
-node --version
-npm --version
-```
-
-The Dockerfiles currently use Go 1.22 builder images while the module declares Go 1.24. Use the local Go workflow until those image tags are aligned; see [Troubleshooting](./troubleshooting.md).
+- **[Docker & Docker Compose](https://docs.docker.com/get-docker/):** If you prefer running the pre-packaged containers via `docker-compose`.
+- **[gRPC Tooling](https://grpc.io/docs/languages/go/quickstart/):** `protoc`, `protoc-gen-go`, and `protoc-gen-go-grpc` are required only if you modify `schema/telemetry.proto`.
+- **[grpcurl](https://github.com/fullstorydev/grpcurl):** A highly recommended CLI tool for sending test queries to the database.
+- **[Node.js (18+)](https://nodejs.org/):** Only required if you intend to modify and build this Docusaurus documentation website locally.
